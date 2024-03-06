@@ -128,8 +128,8 @@
                                     value="{{ $data->title_goals }}">
                             </div>
                             <div class="mb-3">
-                                <textarea name="description_goals" id="summernoteUpdate" placeholder="Description" class="form-control"
-                                    value="{{ $data->description_goals }}" cols="30" rows="10">{{ $data->description_goals }}</textarea>
+                                <textarea name="description_goals" id="summernoteUpdate{{ $data->id_goals }}" placeholder="Description"
+                                    class="form-control" value="{{ $data->description_goals }}" cols="30" rows="10">{{ $data->description_goals }}</textarea>
                                 @error('description_goals')
                                     <p class="tex text-danger">{{ $message }}</p>
                                 @enderror
@@ -150,15 +150,14 @@
 @section('js')
     <script>
         $(function() {
-            // Summernote
-            $('#summernoteUpdate').summernote({
-                placeholder: 'Description Product',
-                tabsize: 2,
-                height: 255
-            });
-
-
-        })
+            @foreach ($goals as $data)
+                $('#summernoteUpdate{{ $data->id_goals }}').summernote({
+                    placeholder: 'Description Goals',
+                    tabsize: 2,
+                    height: 255
+                });
+            @endforeach
+        });
 
         @if (session('success'))
             Swal.fire({

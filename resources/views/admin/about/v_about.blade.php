@@ -128,8 +128,8 @@
                                     value="{{ $data->title_about }}">
                             </div>
                             <div class="mb-3">
-                                <textarea name="description_about" id="summernoteUpdate" placeholder="Description" class="form-control"
-                                    value="{{ $data->description_about }}" cols="30" rows="10">{{ $data->description_about }}</textarea>
+                                <textarea name="description_about" id="summernoteUpdate{{ $data->id_about }}" placeholder="Description"
+                                    class="form-control" value="{{ $data->description_about }}" cols="30" rows="10">{{ $data->description_about }}</textarea>
                                 @error('description_about')
                                     <p class="tex text-danger">{{ $message }}</p>
                                 @enderror
@@ -149,14 +149,13 @@
 @section('js')
     <script>
         $(function() {
-            // Summernote
-            $('#summernoteUpdate').summernote({
-                placeholder: 'Description Product',
-                tabsize: 2,
-                height: 255
-            });
-
-
+            @foreach ($abouts as $data)
+                $('#summernoteUpdate{{ $data->id_about }}').summernote({
+                    placeholder: 'Description About',
+                    tabsize: 2,
+                    height: 255
+                });
+            @endforeach
         })
 
         @if (session('success'))

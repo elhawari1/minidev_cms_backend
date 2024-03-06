@@ -131,8 +131,8 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <textarea name="description_mission" id="summernoteUpdate" placeholder="Description" class="form-control"
-                                    value="{{ $data->description_mission }}" cols="30" rows="10">{{ $data->description_mission }}</textarea>
+                                <textarea name="description_mission" id="summernoteUpdate{{ $data->id_mission }}" placeholder="Description"
+                                    class="form-control" value="{{ $data->description_mission }}" cols="30" rows="10">{{ $data->description_mission }}</textarea>
                                 @error('description_mission')
                                     <p class="tex text-danger">{{ $message }}</p>
                                 @enderror
@@ -153,15 +153,14 @@
 @section('js')
     <script>
         $(function() {
-            // Summernote
-            $('#summernoteUpdate').summernote({
-                placeholder: 'Description Product',
-                tabsize: 2,
-                height: 255
-            });
-
-
-        })
+            @foreach ($missions as $data)
+                $('#summernoteUpdate{{ $data->id_mission }}').summernote({
+                    placeholder: 'Description Missions',
+                    tabsize: 2,
+                    height: 255
+                });
+            @endforeach
+        });
 
         @if (session('success'))
             Swal.fire({

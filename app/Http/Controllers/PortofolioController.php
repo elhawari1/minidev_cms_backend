@@ -29,7 +29,7 @@ class PortofolioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image_portofolio' => 'required|mimes:png,jpg,jpe',
+            'image_portofolio' => 'required|mimes:png,jpg,jpeg',
             'title_portofolio' => 'required',
             'date_start' => 'required|date',
             'date_end' => 'required|date',
@@ -60,7 +60,7 @@ class PortofolioController extends Controller
     public function update(Request $request, $id_portofolio)
     {
         $request->validate([
-            'image_portofolio' => 'mimes:png,jpg,jpe'
+            'image_portofolio' => 'mimes:png,jpg,jpeg'
         ]);
         $portofolio = PortofolioModel::find($id_portofolio);
 

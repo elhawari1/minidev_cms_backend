@@ -266,7 +266,7 @@
                                 <label for="recipient-name" class="col-form-label">Service</label>
                                 <select class="form-select" name="id_service" aria-label="Default select example">
                                     @foreach ($services as $item)
-                                        <option value="{{ $data->id_service }}"
+                                        <option value="{{ $item->id_service }}"
                                             @if ($item->id_service == $data->id_service) selected @endif>{{ $item->name_service }}
                                         </option>
                                         @error('id_service')
@@ -306,8 +306,8 @@
 
                             <div class="mb-3">
                                 <label for="recipient-name" class="col-form-label">Description</label>
-                                <textarea name="description_portofolio" id="summernoteUpdate" placeholder="Description" class="form-control"
-                                    value="{{ $data->description_portofolio }}" cols="30" rows="10">{{ $data->description_portofolio }}</textarea>
+                                <textarea name="description_portofolio" id="summernoteUpdate{{ $data->id_portofolio }}" placeholder="Description"
+                                    class="form-control" value="{{ $data->description_portofolio }}" cols="30" rows="10">{{ $data->description_portofolio }}</textarea>
                                 @error('description_portofolio ')
                                     <p class="tex text-danger">{{ $message }}</p>
                                 @enderror
@@ -337,12 +337,15 @@
 @section('js')
     <script>
         $(function() {
-            $('#summernoteUpdate').summernote({
-                placeholder: 'Description Product',
-                tabsize: 2,
-                height: 255
-            });
-        })
+            @foreach ($portofolio as $data)
+                $('#summernoteUpdate{{ $data->id_portofolio }}').summernote({
+                    placeholder: 'Description Product',
+                    tabsize: 2,
+                    height: 255
+                });
+            @endforeach
+        });
+
 
         @if (session('success'))
             Swal.fire({
