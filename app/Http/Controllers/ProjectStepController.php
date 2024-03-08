@@ -27,18 +27,19 @@ class ProjectStepController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image_projectstep' => 'required|mimes:png,jpg,jpeg',
+            'image_projectstep' => 'required|mimes:png,jpg,jpeg|max:2048',
             'name_projectstep' => 'required'
         ]);
 
         if ($request->hasFile('image_projectstep')) {
             $file_projectstep = $request->file('image_projectstep');
-            $projectstep_extensions = $file_projectstep->extension();
+            $projectstep_extensions = $file_projectstep->getClientOriginalExtension();
             $image_projectstep = $request->name_projectstep . "." . $projectstep_extensions;
             $file_projectstep->move(public_path('Image/projectStep'), $image_projectstep);
 
+            $image_url = url('Image/projectStep/' . $image_projectstep);
             $projectStep = ProjectStepModel::create([
-                'image_projectstep' => $image_projectstep,
+                'image_projectstep' => $image_url,
                 'name_projectstep' => $request->name_projectstep,
             ]);
             $projectStep->save();
@@ -49,17 +50,23 @@ class ProjectStepController extends Controller
 
     public function update(Request $request, $id_projectstep)
     {
+        $request->validate([
+            'image_projectstep' => 'mimes:png,jpg,jpeg|max:2048',
+        ]);
         $projectStep = ProjectStepModel::find($id_projectstep);
         if ($request->hasFile('image_projectstep')) {
-            if (File::exists('Image/projectStep' . '/' . $projectStep->image_projectstep)) {
-                File::delete('Image/projectStep' . '/' . $projectStep->image_projectstep);
+            if (File::exists('Image/projectStep/' . basename($projectStep->image_projectstep))) {
+                File::delete('Image/projectStep/' . basename($projectStep->image_projectstep));
             }
-            $file_image_projectstep = $request->file('image_projectstep');
-            $projectstep_extensions = $file_image_projectstep->extension();
+            $file_projectstep = $request->file('image_projectstep');
+            $projectstep_extensions = $file_projectstep->getClientOriginalExtension();
             $image_projectstep = $request->name_projectstep . "." . $projectstep_extensions;
-            $file_image_projectstep->move(public_path('image_image_projectstep'), $image_projectstep);
+            $file_projectstep->move(public_path('Image/projectStep'), $image_projectstep);
+
+            $image_url = url('Image/projectStep/' . $image_projectstep);
+
             $projectStep->update([
-                'image_projectstep' => $image_projectstep,
+                'image_projectstep' => $image_url,
                 'name_projectstep' => $request->name_projectstep,
                 'usercreate_projectstep' => $request->usercreate_projectstep,
                 'userupdate_projectstep' => $request->userupdate_projectstep,
@@ -78,8 +85,9 @@ class ProjectStepController extends Controller
     public function destroy($id_projectstep)
     {
         $projectStep = ProjectStepModel::find($id_projectstep);
-        if (File::exists('Image/projectStep' . '/' . $projectStep->image_projectstep)) {
-            File::delete('Image/projectStep' . '/' . $projectStep->image_projectstep);
+
+        if (File::exists('Image/projectStep/' . basename($projectStep->image_projectstep))) {
+            File::delete('Image/projectStep/' . basename($projectStep->image_projectstep));
         }
         $projectStep->delete();
         return redirect()->route('projectStep')->with('success');

@@ -135,10 +135,8 @@
                                         <b>Image</b>
                                     </div>
                                     <div class="col-9">
-                                        <a href="{{ asset('Image/Portofolio/' . $data->image_portofolio) }}"
-                                            data-lightbox="models" data-title="{{ $data->title }}">
-                                            <img src="{{ asset('Image/Portofolio/' . $data->image_portofolio) }}"
-                                                class="img-thumbnail" style="width: 200px">
+                                        <a href="{{ $data->image_portofolio }}" data-lightbox="models" target="_blank">
+                                            <img src="{{ $data->image_portofolio }}" alt="" style="width: 200px">
                                         </a>
                                     </div>
                                 </div>

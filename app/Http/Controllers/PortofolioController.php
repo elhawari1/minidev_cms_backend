@@ -29,7 +29,7 @@ class PortofolioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image_portofolio' => 'required|mimes:png,jpg,jpeg',
+            'image_portofolio' => 'required|mimes:png,jpg,jpeg|max:2048',
             'title_portofolio' => 'required',
             'date_start' => 'required|date',
             'date_end' => 'required|date',
@@ -38,13 +38,15 @@ class PortofolioController extends Controller
 
         if ($request->hasFile('image_portofolio')) {
             $file_portofolio = $request->file('image_portofolio');
-            $portofolio_extensions = $file_portofolio->extension();
+            $portofolio_extensions = $file_portofolio->getClientOriginalExtension();
             $image_portofolio = $request->title_portofolio . "." . $portofolio_extensions;
             $file_portofolio->move(public_path('Image/Portofolio'), $image_portofolio);
 
+            $image_url = url('Image/Portofolio/' . $image_portofolio);
+
             $portofolio = PortofolioModel::create([
                 'id_service' => $request->id_service,
-                'image_portofolio' => $image_portofolio,
+                'image_portofolio' => $image_url,
                 'title_portofolio' => $request->title_portofolio,
                 'date_start' => $request->date_start,
                 'date_end' => $request->date_end,
@@ -60,22 +62,23 @@ class PortofolioController extends Controller
     public function update(Request $request, $id_portofolio)
     {
         $request->validate([
-            'image_portofolio' => 'mimes:png,jpg,jpeg'
+            'image_portofolio' => 'mimes:png,jpg,jpeg|max:2048'
         ]);
         $portofolio = PortofolioModel::find($id_portofolio);
 
         if ($request->hasFile('image_portofolio')) {
-            if (File::exists('Image/Portofolio' . '/' . $portofolio->image_portofolio)) {
-                File::delete('Image/Portofolio' . '/' . $portofolio->image_portofolio);
+            if (File::exists('Image/Portofolio/' . basename($portofolio->image_portofolio))) {
+                File::delete('Image/Portofolio/' . basename($portofolio->image_portofolio));
             }
             $file_portofolio = $request->file('image_portofolio');
-            $portofolio_extensions = $file_portofolio->extension();
+            $portofolio_extensions = $file_portofolio->getClientOriginalExtension();
             $image_portofolio = $request->title_portofolio . "." . $portofolio_extensions;
             $file_portofolio->move(public_path('Image/Portofolio'), $image_portofolio);
 
+            $image_url = url('Image/Portofolio/' . $image_portofolio);
             $portofolio->update([
                 'id_service' => $request->id_service,
-                'image_portofolio' => $image_portofolio,
+                'image_portofolio' => $image_url,
                 'title_portofolio' => $request->title_portofolio,
                 'date_start' => $request->date_start,
                 'date_end' => $request->date_end,
@@ -96,8 +99,8 @@ class PortofolioController extends Controller
     public function destroy($id_portofolio)
     {
         $portofolio = PortofolioModel::find($id_portofolio);
-        if (File::exists('Image/Portofolio' . '/' . $portofolio->image_portofolio)) {
-            File::delete('Image/Portofolio' . '/' . $portofolio->image_portofolio);
+        if (File::exists('Image/Portofolio/' . basename($portofolio->image_portofolio))) {
+            File::delete('Image/Portofolio/' . basename($portofolio->image_portofolio));
         }
         $portofolio->delete();
         return redirect()->route('portofolio')->with('success', 'Data Berhasil Didelete');

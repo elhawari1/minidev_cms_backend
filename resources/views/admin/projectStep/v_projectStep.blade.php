@@ -47,8 +47,12 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        <img src="{{ asset('Image/projectStep/' . $data->image_projectstep) }}"
-                                            alt="" style="height: 150px; width: 150px">
+                                        <a href="{{ $data->image_projectstep }}" target="_blank">
+                                            <img src="{{ $data->image_projectstep }}" alt=""
+                                                style="height: 150px; width: 150px">
+                                        </a>
+                                    </td>
+                                    </td>
                                     <td>{{ $data->name_projectstep }}</td>
                                     <td>{{ $data->usercreate_projectstep }}</td>
                                     <td>{{ $data->userupdate_projectstep }}</td>
@@ -124,7 +128,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" action="/projectStep/update/{{ $data->id_projectstep }}">
+                        <form method="POST" action="/projectStep/update/{{ $data->id_projectstep }}"
+                            enctype="multipart/form-data">
                             @csrf
                             <label for="recipient-name" class="col-form-label">Image</label>
                             <input id="input-fa" type="file" name="image_projectstep"

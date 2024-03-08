@@ -48,8 +48,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        <a href="{{ asset('Image/Banner/' . $data->image_banner) }}" target="_blank">
-                                            <img src="{{ asset('Image/Banner/' . $data->image_banner) }}" alt=""
+                                        <a href="{{ $data->image_banner }}" target="_blank">
+                                            <img src="{{ $data->image_banner }}" alt=""
                                                 style="height: 150px; width: 150px">
                                         </a>
                                     </td>
